@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 const LIMITS = Object.freeze({ pixelRatio: 1.35, maxPixels: 1300000, sparkles: 144, confetti: 54 });
 const PALETTES = {
-  sunny: { sky: 0xbce8f1, water: 0x62bcd4, sand: 0xffdc93, grass: 0xb0d977, path: 0xffedbe, leaf: 0x72af7c, light: 0xffeed7 },
+  sunny: { sky: 0xd5e5df, water: 0x7faeaa, sand: 0xccbb89, grass: 0x7b965e, path: 0xf3ddb0, leaf: 0x64875b, light: 0xffeed7 },
   moonlight: { sky: 0x14244d, water: 0x284976, sand: 0x95a7bf, grass: 0x4e7890, path: 0x89adc1, leaf: 0x678eb2, light: 0xc4d7ff }
 };
 
@@ -69,7 +69,7 @@ function create(canvas) {
     const m = new THREE.Mesh(plane, shadowMaterial); m.rotation.x = -Math.PI / 2; m.scale.set(sizeX, sizeZ, 1); m.position.set(x, 18.3, z); scene.add(m); return m;
   }
   const waterMaterial = new THREE.MeshPhongMaterial({ color: PALETTES.sunny.water, shininess: 35, specular: 0xcaf9ff });
-  const sea = new THREE.Mesh(new THREE.PlaneGeometry(2300, 1500), waterMaterial); sea.rotation.x = -Math.PI / 2; sea.position.set(500, -12, 310); scene.add(sea);
+  const sea = new THREE.Mesh(new THREE.PlaneGeometry(2300, 1500), waterMaterial); sea.rotation.x = -Math.PI / 2; sea.position.set(500, -34, 310); scene.add(sea);
   function islandShape(inset) {
     const s = new THREE.Shape();
     // An organic, beveled island. The playable coordinate system remains rectangular.
@@ -82,8 +82,8 @@ function create(canvas) {
   }
   const sandMaterial = new THREE.MeshLambertMaterial({ color: PALETTES.sunny.sand });
   const grassMaterial = new THREE.MeshLambertMaterial({ color: PALETTES.sunny.grass });
-  const sand = new THREE.Mesh(new THREE.ExtrudeGeometry(islandShape(0), { depth: 10, bevelEnabled: true, bevelThickness: 4, bevelSize: 4, bevelSegments: 2, curveSegments: 16 }), sandMaterial);
-  sand.rotation.x = -Math.PI / 2; sand.position.y = -8; scene.add(sand);
+  const sand = new THREE.Mesh(new THREE.ExtrudeGeometry(islandShape(0), { depth: 32, bevelEnabled: true, bevelThickness: 4, bevelSize: 4, bevelSegments: 2, curveSegments: 16 }), sandMaterial);
+  sand.rotation.x = -Math.PI / 2; sand.position.y = -30; scene.add(sand);
   const grass = new THREE.Mesh(new THREE.ExtrudeGeometry(islandShape(21), { depth: 4, bevelEnabled: true, bevelThickness: 3, bevelSize: 3, bevelSegments: 2, curveSegments: 16 }), grassMaterial);
   grass.rotation.x = -Math.PI / 2; grass.position.y = 10; scene.add(grass);
   const pathMaterial = new THREE.MeshBasicMaterial({ color: PALETTES.sunny.path });
@@ -107,7 +107,7 @@ function create(canvas) {
   const waves = [];
   for (let i = 0; i < 14; i++) {
     const m = new THREE.Mesh(new THREE.TorusGeometry(22 + i % 3 * 10, 1.1, 3, 20, Math.PI * 1.1), new THREE.MeshBasicMaterial({ color: 0xd4f5fb, transparent: true, opacity: .26 }));
-    m.rotation.x = -Math.PI / 2; m.position.set(i % 2 ? -35 - i * 7 : 1025 + i * 6, -10, 65 + i * 38); scene.add(m); waves.push(m);
+    m.rotation.x = -Math.PI / 2; m.position.set(i % 2 ? -35 - i * 7 : 1025 + i * 6, -32, 65 + i * 38); scene.add(m); waves.push(m);
   }
   const clouds = [];
   for (const [x, z, size] of [[40, -54, 1], [1070, 90, 1.1], [1010, 623, .8], [-53, 568, .8]]) {
@@ -164,8 +164,8 @@ function create(canvas) {
   const cottage = new THREE.Group(); cottage.position.set(155, 15, 310); scene.add(cottage); shadow(160, 315, 185, 145);
   cube(cottage, 0xffedc5, [0, 43, 0], [119, 86, 93]);
   const roofShape = new THREE.Shape(); roofShape.moveTo(-73, 0); roofShape.lineTo(0, 58); roofShape.lineTo(73, 0); roofShape.closePath();
-  mesh(cottage, new THREE.ExtrudeGeometry(roofShape, { depth: 109, bevelEnabled: true, bevelSize: 2, bevelThickness: 2, bevelSegments: 1 }), 0xca8a9d, [0, 84, -54], [1, 1, 1]);
-  cube(cottage, 0xb87e93, [39, 130, -15], [18, 39, 20]);
+  mesh(cottage, new THREE.ExtrudeGeometry(roofShape, { depth: 109, bevelEnabled: true, bevelSize: 2, bevelThickness: 2, bevelSegments: 1 }), 0xb96e50, [0, 84, -54], [1, 1, 1]);
+  cube(cottage, 0x986a54, [39, 130, -15], [18, 39, 20]);
   cube(cottage, 0x336a83, [0, 26, 48], [27, 52, 3]); ball(cottage, 0xffd174, [8, 26, 52], [2, 2, 2]);
   const windowMaterial = new THREE.MeshLambertMaterial({ color: 0xa6deef, emissive: 0x000000 });
   for (const x of [-38, 38]) {
@@ -174,6 +174,11 @@ function create(canvas) {
     cube(cottage, 0xfff7dd, [x, 48, 53], [2, 22, 2]); cube(cottage, 0xfff7dd, [x, 48, 53], [20, 2, 2]);
     cube(cottage, 0xa68068, [x, 28, 55], [30, 9, 14]); ball(cottage, 0x87ad76, [x, 35, 58], [17, 8, 8]);
   }
+  // Each homecoming lights one porch lantern, without extra light passes.
+  const porchLanterns = [-38, 0, 38].map(x => {
+    cube(cottage, 0x6e6751, [x, 79, 51], [15, 19, 9]);
+    return cube(cottage, 0xffd174, [x, 79, 57], [10, 13, 3], true);
+  });
   const homeLabel = label('⌂ HOME', 105, 29); cottage.add(homeLabel); homeLabel.position.set(0, 163, 0);
   const homeRing = new THREE.Mesh(new THREE.RingGeometry(64, 67, 48), new THREE.MeshBasicMaterial({ color: 0xfff7bd, transparent: true, opacity: .65, side: THREE.DoubleSide })); homeRing.rotation.x = -Math.PI / 2; homeRing.position.set(155, 16.6, 400); scene.add(homeRing);
   const balloons = [];
@@ -190,7 +195,9 @@ function create(canvas) {
   const treeGroups = [];
   for (const [x, z, scale] of [[910, 306, 1], [360, 465, 1]]) {
     const g = new THREE.Group(); mesh(g, cylinder, 0xaa8064, [0, 24, 0], [9, 48, 9]);
-    ball(g, 0x70aa79, [-17, 60, 0], [26, 30, 26]); ball(g, 0x88be85, [18, 65, 0], [28, 32, 28]); ball(g, 0x9bcc8b, [0, 87, -3], [31, 29, 29]);
+    mesh(g, cone, 0x587b59, [0, 53, 0], [35, 61, 35]);
+    mesh(g, cone, 0x6b8d61, [0, 76, 0], [28, 55, 28]);
+    mesh(g, cone, 0x88a674, [0, 96, 0], [20, 46, 20]);
     g.position.set(x, 16, z); scene.add(g); treeGroups.push(g); shadow(x, z, 110, 72);
   }
   const logs = new THREE.Group(); scene.add(logs);
@@ -259,6 +266,7 @@ function create(canvas) {
     butterflies.forEach(({ g, left, right }, i) => { g.position.set(82 + i * 33 + Math.sin(time * .7 + i) * 14, 66 + Math.sin(time * 1.5 + i) * 7, 128 + i * 19 + Math.cos(time * .8) * 13); left.rotation.y = Math.sin(time * 9) * .6; right.rotation.y = -left.rotation.y; });
     shell.rotation.y = state.discoveries.includes('shell') ? Math.sin(time * 1.7) * .2 : -.25;
     balloons.forEach((g, i) => { g.visible = state.rescued > i; g.position.y = 150 + Math.sin(time * 1.2 + i) * 5; });
+    porchLanterns.forEach((lamp, i) => { lamp.material = mat(state.rescued > i ? 0xffd174 : 0x9a9b85, state.rescued > i); });
     homeRing.material.opacity = .48 + Math.sin(time * 2) * .12;
     snacks.forEach((g, i) => { g.visible = !state.snacks[i].collected; g.children[0].position.y = 37 + Math.sin(time * 2 + i) * 5; g.children[0].rotation.y = Math.sin(time * .8 + i) * .3; });
     Object.values(playerModels).forEach(m => { m.root.visible = m.floorShadow.visible = false; });
