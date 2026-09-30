@@ -4,7 +4,7 @@ const root = path.resolve(__dirname, '..');
 const source = name => fs.readFileSync(path.join(root, 'src', name), 'utf8');
 const output = path.join(root, 'public');
 fs.mkdirSync(output, { recursive: true });
-for (const name of ['index.html', 'style.css', 'logic.js', 'draw.js', 'game.js']) {
+for (const name of ['index.html', 'style.css', 'logic.js', 'draw.js', 'game.js', 'mobile-preview.html']) {
   fs.writeFileSync(path.join(output, name), source(name));
 }
 // A true single-file fallback: no fetch, modules, CDN, image, or font requests.

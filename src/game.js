@@ -56,6 +56,10 @@
   }
 
   function syncUI() {
+    canvas.setAttribute('aria-label', state.config.snacksRequired
+      ? 'Island map. Use arrow keys or W A S D to move. Collect star snacks, walk to the three friends, then return to the house.'
+      : 'Island map. Use arrow keys or W A S D to move. Walk to the three friends, then return to the house. Star snacks are optional.');
+    $('win-first-line').textContent = state.config.snacksRequired ? 'You shared snacks.' : 'You explored the island.';
     $('snack-count').textContent = state.pocket;
     $('home-count').textContent = `${state.rescued} / ${state.friends.length}`;
     $('friend-dots').textContent = state.friends.map(f => f.status === 'home' ? '●' : '○').join(' ');

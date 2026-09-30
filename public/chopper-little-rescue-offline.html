@@ -745,7 +745,7 @@ details[open] summary:after {
             <span class="gentle-note">No rush. Just explore.</span>
           </div>
           <div class="welcome-card" id="pause-card" hidden><div class="postmark">TAKE A BREATHER</div><h2>Adventure paused</h2><p>Your friends will wait right here.</p><button id="resume" class="big-button">Keep helping <span aria-hidden="true">→</span></button></div>
-          <div class="welcome-card win-card" id="win-card" hidden><div class="postmark">KINDNESS CREW <span aria-hidden="true">★</span></div><h2>Everyone is home!</h2><p>You shared snacks.<br>You helped friends.<br>That’s a great adventure.</p><div class="win-stars" aria-hidden="true">✦ ★ ✦</div><button id="play-again" class="big-button">Play again <span aria-hidden="true">↻</span></button></div>
+          <div class="welcome-card win-card" id="win-card" hidden><div class="postmark">KINDNESS CREW <span aria-hidden="true">★</span></div><h2>Everyone is home!</h2><p><span id="win-first-line">You shared snacks.</span><br>You helped friends.<br>That’s a great adventure.</p><div class="win-stars" aria-hidden="true">✦ ★ ✦</div><button id="play-again" class="big-button">Play again <span aria-hidden="true">↻</span></button></div>
         </div>
       </div>
       <div class="game-bottom"><p id="message" role="status" aria-live="polite">Find a star snack, then a friend!</p><div class="key-hint"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><span>or W A S D</span></div></div>
@@ -1075,9 +1075,10 @@ details[open] summary:after {
       line(ctx, [[x + dx, y - 61], [x + dx, y - 41]], C.cream, 2);
       line(ctx, [[x + dx - 9, y - 51], [x + dx + 9, y - 51]], C.cream, 2);
     }
-    line(ctx, [[x, y + 57], [x, y + 84]], '#8d7957', 5);
-    rounded(ctx, x - 43, y + 52, 86, 29, 6, C.cream, C.ink, 2);
-    text(ctx, '⌂ HOME', x, y + 67, 14);
+    // Label above the roof, clear of the helper and returning friends.
+    line(ctx, [[x, y - 158], [x, y - 133]], '#8d7957', 5);
+    rounded(ctx, x - 43, y - 185, 86, 29, 6, C.cream, C.ink, 2);
+    text(ctx, '⌂ HOME', x, y - 170, 14);
     heart(ctx, x, y - 104, 8, C.cream);
   }
 
@@ -1212,6 +1213,10 @@ details[open] summary:after {
   }
 
   function syncUI() {
+    canvas.setAttribute('aria-label', state.config.snacksRequired
+      ? 'Island map. Use arrow keys or W A S D to move. Collect star snacks, walk to the three friends, then return to the house.'
+      : 'Island map. Use arrow keys or W A S D to move. Walk to the three friends, then return to the house. Star snacks are optional.');
+    $('win-first-line').textContent = state.config.snacksRequired ? 'You shared snacks.' : 'You explored the island.';
     $('snack-count').textContent = state.pocket;
     $('home-count').textContent = `${state.rescued} / ${state.friends.length}`;
     $('friend-dots').textContent = state.friends.map(f => f.status === 'home' ? '●' : '○').join(' ');

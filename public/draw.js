@@ -149,9 +149,10 @@
       line(ctx, [[x + dx, y - 61], [x + dx, y - 41]], C.cream, 2);
       line(ctx, [[x + dx - 9, y - 51], [x + dx + 9, y - 51]], C.cream, 2);
     }
-    line(ctx, [[x, y + 57], [x, y + 84]], '#8d7957', 5);
-    rounded(ctx, x - 43, y + 52, 86, 29, 6, C.cream, C.ink, 2);
-    text(ctx, '⌂ HOME', x, y + 67, 14);
+    // Label above the roof, clear of the helper and returning friends.
+    line(ctx, [[x, y - 158], [x, y - 133]], '#8d7957', 5);
+    rounded(ctx, x - 43, y - 185, 86, 29, 6, C.cream, C.ink, 2);
+    text(ctx, '⌂ HOME', x, y - 170, 14);
     heart(ctx, x, y - 104, 8, C.cream);
   }
 
