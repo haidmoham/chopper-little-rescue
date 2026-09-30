@@ -1,5 +1,7 @@
 # Chopper's Little Rescue
 
+This branch is the **3D storybook review checkpoint**. Read [REVIEW-CHECKPOINT.md](REVIEW-CHECKPOINT.md) for implementation status, Windows pickup, and checks still pending. The verified classroom fallback is `public/classroom-backup.html`.
+
 A tiny, big-hearted animal rescue game for a live engineering workshop. Find star snacks, meet Bunny, Duck, and Fox, and guide them home. No battles, timers, lives, accounts, analytics, or child data.
 
 ## Play
@@ -19,15 +21,16 @@ Download `public/chopper-little-rescue-offline.html` and open it in a browser. E
 
 ## Run and change it
 
-Requires Node 20+ for build/tests; the game itself has no package dependencies.
+Requires Node 20+ for build/tests. Three.js is bundled into the game; esbuild is a build-time dependency. There are no runtime CDN, model, font, or texture downloads.
 
 ```sh
+npm ci
 npm test
 npm run build
 npm run dev
 ```
 
-Open http://localhost:4173. No `npm install` is needed.
+Open http://localhost:4173. Run `npm ci` once after checkout.
 
 The local preview uses only Node's built-in HTTP server. For a desktop inspection of the phone layout, open `/mobile-preview.html`; it displays the standalone HTML in a real 390-pixel iframe with the arrow pad.
 
@@ -35,6 +38,7 @@ The local preview uses only Node's built-in HTTP server. For a desktop inspectio
 |---|---|
 | `src/logic.js` | Named `CONFIG`, state, rules, movement, collisions, rescue goal |
 | `src/draw.js` | Original animal and island drawing functions |
+| `src/scene.js` | Three.js toy models, lighting, transformations, and bounded effects |
 | `src/game.js` | Keyboard/pointer input, sound, UI, update/draw loop |
 | `src/style.css` | Layout, colors, text, responsive controls |
 | `src/index.html` | Welcome, instructions, pause/win cards, workshop panel |

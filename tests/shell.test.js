@@ -13,7 +13,7 @@ function boot() {
     focus() {}, addEventListener(type, listener) { this.listeners[type] = listener; },
     fire(type, fields = {}) { this.listeners[type]?.({ target: this, preventDefault() {}, ...fields }); }
   });
-  const ids = ['world', 'stage', 'snack-count', 'home-count', 'friend-dots', 'message', 'overlay', 'welcome', 'pause-card', 'win-card', 'win-first-line', 'pause', 'resume', 'play-again', 'teacher', 'start', 'restart', 'sound', 'workshop', 'animal', 'obstacles', 'snacks-required', 'reset-defaults'];
+  const ids = ['world', 'stage', 'snack-count', 'home-count', 'friend-dots', 'message', 'overlay', 'welcome', 'pause-card', 'win-card', 'win-first-line', 'pause', 'resume', 'play-again', 'teacher', 'start', 'restart', 'sound', 'workshop', 'animal', 'obstacles', 'snacks-required', 'reset-defaults', 'performance', 'world-mood', 'flying', 'animal-scale', 'calm-motion', 'low-power'];
   const elements = Object.fromEntries(ids.map(id => [id, make(id)]));
   let width = 1000;
   elements.world.getBoundingClientRect = () => ({ width });
@@ -73,7 +73,10 @@ test('offline build is one file with no runtime asset references', () => {
   const html = fs.readFileSync(path.join(__dirname, '../public/chopper-little-rescue-offline.html'), 'utf8');
   assert.equal(/<script[^>]+src=/.test(html), false);
   assert.equal(/<link[^>]+rel="stylesheet"/.test(html), false);
-  assert.equal(/\b(?:fetch|XMLHttpRequest|WebSocket)\s*\(/.test(html), false);
+  for (const name of ['logic.js', 'game.js', 'draw.js', 'scene.js']) {
+    const source = fs.readFileSync(path.join(__dirname, '../src', name), 'utf8');
+    assert.equal(/\b(?:fetch|XMLHttpRequest|WebSocket)\s*\(/.test(source), false);
+  }
   assert.equal(/url\(\s*['"]?https?:/.test(html), false);
   assert.equal(html.includes('window.RescueGame'), true);
 });

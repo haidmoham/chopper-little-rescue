@@ -97,3 +97,22 @@ test('a complete three-friend route is reachable by movement, with no teleportin
   walkTo(814, 550); walkTo(155, 550); walkTo(155, 435);
   assert.equal(s.rescued, 3); assert.equal(s.phase, 'won');
 });
+
+test('wings pass over obstacles but keep the island boundary', () => {
+  const s = play({ flying: true }); s.player = { x: 400, y: 293, facing: 1 };
+  tick(s, { right: true }, 70); assert.ok(s.player.x > 650);
+  tick(s, { right: true }, 500); assert.equal(s.player.x, 963);
+});
+test('world, scale and low-power transformations keep rules unchanged', () => {
+  const s = play({ worldMood: 'moonlight', animalScale: 1.6, lowPower: true });
+  s.player = { x: 400, y: 293, facing: 1 };
+  tick(s, { right: true }, 100); assert.ok(s.player.x < 418);
+  assert.equal(s.config.playerSpeed, R.CONFIG.playerSpeed);
+});
+test('effects stay bounded, expire, and homecoming timing does not move the player', () => {
+  const s = play();
+  for (let i = 0; i < 50; i++) R.burst(s, 'star', 200, 200);
+  assert.equal(s.effects.length, 14); tick(s, {}, 100); assert.equal(s.effects.length, 0);
+  s.phase = 'won'; const x = s.player.x; tick(s, { right: true }, 120);
+  assert.equal(s.player.x, x); assert.ok(s.celebrationTime > 1.9);
+});

@@ -8,5 +8,13 @@
     "test": "node --test tests/*.test.js",
     "dev": "node scripts/dev.js"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
 }

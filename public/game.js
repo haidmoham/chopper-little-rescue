@@ -2,18 +2,23 @@
 (function () {
   'use strict';
   const Rules = window.RescueRules;
-  const canvas = document.getElementById('world');
-  const ctx = canvas.getContext('2d');
+  let canvas = document.getElementById('world');
+  let sceneRenderer = null;
+  try { sceneRenderer = window.RescueScene?.create(canvas); } catch (error) { console.warn('Using the illustrated fallback.', error.message); }
+  let ctx = sceneRenderer ? null : canvas.getContext('2d');
+  if (!sceneRenderer && !ctx) { const replacement = canvas.cloneNode(); canvas.replaceWith(replacement); canvas = replacement; ctx = canvas.getContext('2d'); }
   const $ = id => document.getElementById(id);
-  let state = Rules.createState();
+  const prefersCalm = Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+  let state = Rules.createState({ reducedMotion: prefersCalm });
   let input = {};
   let soundOn = false;
   let audio = null;
   let lastTime = 0;
   let lastPhase = '';
   let lastMessage = '';
-  let roundSettings = {};
-  let celebrationUntil = 0;
+  let roundSettings = { reducedMotion: prefersCalm };
+  let winShown = false;
+  let lastStatsAt = 0;
   const keyDirections = { ArrowUp: 'up', w: 'up', ArrowDown: 'down', s: 'down', ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right' };
 
   function clearInput() {
@@ -31,7 +36,7 @@
     clearInput();
     roundSettings = { ...settings };
     state = Rules.createState(roundSettings);
-    celebrationUntil = 0;
+    winShown = false;
     if (play) startRound(); else syncUI();
   }
   function pauseRound() {
@@ -63,26 +68,30 @@
     $('snack-count').textContent = state.pocket;
     $('home-count').textContent = `${state.rescued} / ${state.friends.length}`;
     $('friend-dots').textContent = state.friends.map(f => f.status === 'home' ? '●' : '○').join(' ');
+    const showWin = state.phase === 'won' && (state.config.reducedMotion || state.celebrationTime >= 2.8);
+    $('overlay').hidden = state.phase === 'playing' || state.phase === 'won' && !showWin;
+    $('win-card').hidden = !showWin;
+    if (showWin && !winShown) { winShown = true; $('play-again').focus({ preventScroll: true }); }
     if (state.message !== lastMessage) {
       $('message').textContent = state.message;
       lastMessage = state.message;
     }
     if (state.phase === lastPhase) return;
     const phase = state.phase;
+    $('overlay').setAttribute('data-phase', phase);
     $('stage').classList.toggle('is-playing', phase === 'playing');
-    $('overlay').hidden = phase === 'playing';
     $('welcome').hidden = phase !== 'ready';
     $('pause-card').hidden = phase !== 'paused';
-    $('win-card').hidden = phase !== 'won';
     $('pause').disabled = phase === 'ready' || phase === 'won';
     $('pause').textContent = phase === 'paused' ? 'Resume' : 'Pause';
-    if (phase === 'won') { celebrationUntil = performance.now() / 1000 + 4; clearInput(); $('play-again').focus({ preventScroll: true }); }
+    if (phase === 'won') clearInput();
     lastPhase = phase;
   }
 
   function fitCanvas() {
     // Logical coordinates stay constant as the page resizes; backing pixels stay crisp.
     const rect = canvas.getBoundingClientRect();
+    if (sceneRenderer) { sceneRenderer.resize(rect.width, rect.width * Rules.CONFIG.height / Rules.CONFIG.width); return; }
     const scale = Math.min(2, window.devicePixelRatio || 1);
     // CSS may letterbox the mobile canvas, so use its logical aspect ratio.
     const backingWidth = Math.max(1, Math.round(rect.width * scale));
@@ -98,9 +107,13 @@
     Rules.update(state, input, dt);
     state.events.forEach(playTone);
     syncUI();
-    // Stop the confetti after a short celebration.
-    const artState = state.phase === 'won' && seconds > celebrationUntil ? { ...state, phase: 'celebrated' } : state;
-    window.RescueArt.draw(ctx, artState, seconds);
+    if (sceneRenderer) sceneRenderer.draw(state, seconds);
+    else window.RescueArt.draw(ctx, state, seconds);
+    if (seconds - lastStatsAt > 1) {
+      const stats = sceneRenderer?.stats();
+      $('performance').textContent = stats ? `3D diorama · ${stats.fps} fps · ${stats.drawCalls} draw calls · ${Math.round(stats.triangles / 1000)}k triangles · DPR ${stats.pixelRatio}` : 'Illustrated fallback · 3D is unavailable in this browser';
+      lastStatsAt = seconds;
+    }
     requestAnimationFrame(frame);
   }
 
@@ -168,14 +181,15 @@
   });
   $('workshop').addEventListener('submit', event => {
     event.preventDefault();
-    restartRound({ playerAnimal: $('animal').value, obstacleStyle: $('obstacles').value, snacksRequired: $('snacks-required').checked });
+    restartRound({ playerAnimal: $('animal').value, obstacleStyle: $('obstacles').value, snacksRequired: $('snacks-required').checked, worldMood: $('world-mood').value, flying: $('flying').checked, animalScale: Number($('animal-scale').value) || 1, reducedMotion: $('calm-motion').checked, lowPower: $('low-power').checked });
     $('teacher').open = false;
   });
   $('reset-defaults').addEventListener('click', () => {
     $('animal').value = Rules.CONFIG.playerAnimal;
     $('obstacles').value = Rules.CONFIG.obstacleStyle;
     $('snacks-required').checked = Rules.CONFIG.snacksRequired;
-    restartRound({});
+    $('world-mood').value = 'sunny'; $('flying').checked = false; $('animal-scale').value = '1'; $('calm-motion').checked = prefersCalm; $('low-power').checked = false;
+    restartRound({ reducedMotion: prefersCalm });
     $('teacher').open = false;
   });
   $('teacher').addEventListener('toggle', () => {
@@ -190,6 +204,7 @@
     soundEnabled: () => soundOn
   });
   fitCanvas();
+  $('calm-motion').checked = prefersCalm;
   syncUI();
   requestAnimationFrame(frame);
 })();

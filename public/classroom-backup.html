@@ -1,0 +1,1360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fffaf0">
+  <meta name="description" content="A tiny, kind island adventure. Find star snacks and bring three animal friends home. No timers, no battles, just helping.">
+  <title>Chopper's Little Rescue</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23ffdc72'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='72'%3E★%3C/text%3E%3C/svg%3E">
+  <style>:root {
+  color-scheme:light;
+  --ink:#243b47;
+  --cream:#fffaf0;
+  --blue:#1d6073;
+  --line:#d8dacf;
+  --yellow:#ffdc72;
+  --purple:#604f90
+}
+* {
+  box-sizing:border-box
+}
+body {
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;
+  font-weight:600
+}
+button,select,input {
+  font:inherit
+}
+button {
+  cursor:pointer
+}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,canvas:focus-visible {
+  outline:4px solid var(--purple);
+  outline-offset:4px
+}
+button:disabled {
+  opacity:.4;
+  cursor:default
+}
+.shell {
+  max-width:1190px;
+  margin:auto;
+  padding:28px 35px 18px
+}
+.masthead {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:22px
+}
+.eyebrow {
+  font-size:10px;
+  letter-spacing:2px;
+  font-weight:800;
+  color:#63766e;
+  display:block;
+  margin-bottom:8px
+}
+h1 {
+  font-family:ui-rounded,"Trebuchet MS",sans-serif;
+  font-size:37px;
+  letter-spacing:-1.7px;
+  line-height:1;
+  margin:0;
+  font-weight:900
+}
+h1>span:first-child {
+  color:var(--blue)
+}
+.title-star {
+  color:#c17c20;
+  margin-left:12px;
+  font-size:33px
+}
+.utility {
+  display:flex;
+  gap:8px
+}
+.soft-button {
+  background:#fffdf8;
+  border:1.5px solid #ccd3cd;
+  border-radius:12px;
+  padding:11px 14px;
+  color:var(--ink);
+  font-size:13px;
+  white-space:nowrap
+}
+.soft-button:hover {
+  background:#edf4ef
+}
+.game {
+  border:2px solid #294957;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 7px 0 #d9dfd4;
+  background:#fffdf7
+}
+.goal-bar {
+  padding:15px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  min-height:64px;
+  background:#fffdf7
+}
+.goal {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:18px;
+  font-weight:900
+}
+.home-icon {
+  font-size:32px;
+  line-height:1;
+  color:var(--blue)
+}
+.counters {
+  display:flex;
+  gap:15px;
+  align-items:center;
+  font-size:18px
+}
+.counter-label {
+  font-size:12px;
+  color:#536763
+}
+.snack-counter {
+  background:#fff1b9;
+  padding:7px 12px;
+  border-radius:11px;
+  white-space:nowrap
+}
+.snack-counter>span:first-child {
+  color:#885711
+}
+.home-counter {
+  white-space:nowrap
+}
+#friend-dots {
+  margin-left:9px;
+  font-size:18px;
+  letter-spacing:2px;
+  color:var(--purple)
+}
+.stage {
+  position:relative;
+  background:#acdbe2;
+  isolation:isolate
+}
+canvas {
+  width:100%;
+  height:auto;
+  display:block;
+  aspect-ratio:1000/620;
+  touch-action:none;
+  outline-offset:-6px!important
+}
+.overlay {
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#dff0e563;
+  backdrop-filter:blur(2px)
+}
+.overlay[hidden],[hidden] {
+  display:none!important
+}
+.welcome-card {
+  background:#fffcf4;
+  max-width:445px;
+  width:72%;
+  padding:29px 32px 23px;
+  text-align:center;
+  border:2px solid var(--ink);
+  border-radius:26px;
+  box-shadow:8px 8px 0 #29495725;
+  transform:rotate(-1deg)
+}
+.postmark {
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:var(--blue)
+}
+.postmark span {
+  color:#a86616;
+  margin-left:8px
+}
+h2 {
+  font-size:43px;
+  line-height:1.06;
+  letter-spacing:-1.5px;
+  margin:16px 0 12px;
+  font-weight:900
+}
+.welcome-card p {
+  font-size:17px;
+  line-height:1.5;
+  margin:0 0 18px;
+  color:#566c68
+}
+.steps {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:9px;
+  margin:18px 0 22px
+}
+.steps div {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:11px
+}
+.steps b {
+  font-size:32px;
+  line-height:1;
+  color:var(--blue)
+}
+.steps div:first-child b {
+  color:#9c6714
+}
+.step-arrow {
+  color:#829387;
+  font-size:19px
+}
+.big-button {
+  background:var(--yellow);
+  color:var(--ink);
+  border:2px solid var(--ink);
+  border-radius:14px;
+  padding:14px 25px;
+  font-size:20px;
+  font-weight:900;
+  box-shadow:0 4px 0 var(--ink);
+  min-width:210px
+}
+.big-button:hover {
+  background:#ffe796;
+  transform:translateY(-1px)
+}
+.big-button:active {
+  transform:translateY(3px);
+  box-shadow:0 1px 0 var(--ink)
+}
+.big-button span {
+  padding-left:12px
+}
+.gentle-note {
+  font-size:11px;
+  display:block;
+  margin-top:14px;
+  color:#63776c
+}
+.win-stars {
+  font-size:45px;
+  color:#a86616;
+  margin:0 0 20px
+}
+.win-card {
+  transform:rotate(1deg)
+}
+.game-bottom {
+  min-height:57px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 22px;
+  gap:12px;
+  background:#fffdf7
+}
+#message {
+  margin:0;
+  font-size:15px;
+  line-height:1.35;
+  color:var(--blue);
+  font-weight:800
+}
+.key-hint {
+  display:flex;
+  gap:3px;
+  align-items:center;
+  white-space:nowrap
+}
+kbd {
+  border:1px solid #c7cec7;
+  background:#f3f5ec;
+  box-shadow:0 2px 0 #c7cec7;
+  border-radius:5px;
+  min-width:22px;
+  text-align:center;
+  padding:2px 4px;
+  font-family:inherit;
+  font-size:13px
+}
+.key-hint span {
+  font-size:10px;
+  margin-left:6px;
+  color:#60756c
+}
+.below-game {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:20px 3px 22px
+}
+.legend {
+  display:flex;
+  gap:22px;
+  font-size:12px;
+  color:#5c706c
+}
+.legend span {
+  display:flex;
+  align-items:center;
+  gap:7px
+}
+.legend b {
+  font-size:23px;
+  line-height:1;
+  color:var(--blue)
+}
+.legend b.legend-star {
+  color:#976313
+}
+.island-note {
+  font-size:12px;
+  color:#6c7b70
+}
+.touch-controls {
+  display:none;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  margin:0 auto 22px;
+  width:190px;
+  text-align:center
+}
+.touch-controls>button {
+  margin-bottom:7px
+}
+.touch-controls div {
+  display:flex;
+  gap:8px;
+  justify-content:center
+}
+.touch-controls button {
+  width:58px;
+  height:52px;
+  background:#fffdf7;
+  border:2px solid var(--ink);
+  border-radius:13px;
+  box-shadow:0 3px 0 #becdc6;
+  font-size:28px;
+  color:var(--ink);
+  touch-action:none
+}
+.touch-controls button.pressed {
+  background:var(--yellow);
+  transform:translateY(2px);
+  box-shadow:0 1px 0 #becdc6
+}
+footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  border-top:1px solid #dce0d4;
+  padding-top:15px;
+  gap:25px;
+  color:#728074;
+  font-size:10px
+}
+footer>span {
+  white-space:nowrap
+}
+footer>span>span {
+  color:#b38233;
+  margin-left:7px
+}
+details {
+  max-width:630px;
+  position:relative
+}
+summary {
+  cursor:pointer;
+  list-style:none;
+  text-align:right;
+  color:#637669
+}
+summary::-webkit-details-marker {
+  display:none
+}
+summary:after {
+  content:' +';
+  font-size:13px
+}
+details[open] summary:after {
+  content:' −'
+}
+#workshop {
+  margin-top:14px;
+  padding:19px 22px;
+  border:1px solid #ccd5c9;
+  background:#f0f3e7;
+  border-radius:16px;
+  color:var(--ink);
+  font-size:13px
+}
+#workshop p {
+  font-size:11px;
+  line-height:1.6
+}
+.workshop-options {
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px
+}
+.workshop-options label {
+  display:flex;
+  flex-direction:column;
+  gap:7px
+}
+.workshop-options select {
+  padding:8px 9px;
+  background:#fffdf7;
+  border:1px solid #7c9181;
+  border-radius:8px;
+  color:var(--ink)
+}
+.workshop-options .check-label {
+  flex-direction:row;
+  align-items:center;
+  font-size:12px
+}
+.check-label input {
+  width:18px;
+  height:18px;
+  accent-color:var(--blue)
+}
+.workshop-actions {
+  display:flex;
+  gap:9px;
+  margin-top:16px
+}
+.workshop-tip {
+  color:#64776b;
+  margin-bottom:0!important
+}
+@media(pointer:coarse) {
+  .touch-controls {
+    display:block
+  }
+  .key-hint {
+    display:none
+  }
+}
+@media(min-width:1400px) {
+  .shell {
+    max-width:1260px
+  }
+}
+/* Keep the whole adventure visible on a short laptop or projector screen. */
+@media(min-width:851px) {
+  .shell {
+    max-width:min(1260px, calc((100svh - 335px) * 1.613 + 70px));
+  }
+}
+@media(min-width:851px) and (max-height:900px) {
+  h1 {
+    font-size:30px;
+    letter-spacing:-1.2px;
+  }
+  .soft-button {
+    font-size:11px;
+    padding:10px;
+  }
+  .welcome-card {
+    padding:20px 28px;
+  }
+  h2 {
+    font-size:35px;
+    margin:13px 0 10px;
+  }
+  .welcome-card p {
+    font-size:15px;
+    margin-bottom:12px;
+  }
+  .steps {
+    margin:14px 0 18px;
+  }
+  .big-button {
+    font-size:18px;
+    padding:12px 19px;
+  }
+}
+@media(max-width:850px) {
+  .shell {
+    padding:20px 18px
+  }
+  .masthead {
+    align-items:flex-start;
+    margin-bottom:17px
+  }
+  h1 {
+    font-size:30px;
+    letter-spacing:-1.2px
+  }
+  .eyebrow {
+    font-size:8px;
+    letter-spacing:1.3px
+  }
+  .title-star {
+    font-size:26px;
+    margin-left:5px
+  }
+  .soft-button {
+    padding:10px;
+    font-size:11px
+  }
+  .goal-bar {
+    padding:12px 16px
+  }
+  .goal {
+    font-size:15px
+  }
+  .counters {
+    font-size:16px;
+    gap:10px
+  }
+  .counter-label {
+    font-size:10px
+  }
+  #friend-dots {
+    display:none
+  }
+  .welcome-card {
+    padding:22px 27px;
+    max-width:400px
+  }
+  h2 {
+    font-size:35px
+  }
+  .welcome-card p {
+    font-size:15px;
+    margin-bottom:12px
+  }
+  .steps {
+    margin:14px 0 18px
+  }
+  .steps b {
+    font-size:27px
+  }
+  .big-button {
+    font-size:18px;
+    padding:12px 19px
+  }
+  .game-bottom {
+    padding:12px 16px
+  }
+  #message {
+    font-size:13px
+  }
+  .key-hint {
+    display:none
+  }
+}
+@media(max-width:560px) {
+  .shell {
+    padding:16px 12px
+  }
+  .masthead {
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:15px
+  }
+  .utility {
+    width:100%;
+    justify-content:flex-end;
+    gap:6px
+  }
+  .brand {
+    width:100%
+  }
+  h1 {
+    font-size:31px
+  }
+  .soft-button {
+    padding:9px 12px
+  }
+  .goal-bar {
+    flex-wrap:wrap;
+    gap:6px;
+    justify-content:center;
+    padding:10px
+  }
+  .goal {
+    font-size:14px;
+    gap:7px
+  }
+  .home-icon {
+    font-size:26px
+  }
+  .counters {
+    font-size:15px;
+    gap:13px
+  }
+  .snack-counter {
+    padding:5px 8px
+  }
+  .game {
+    border-radius:18px
+  }
+  .stage {
+    height:360px;
+    aspect-ratio:auto;
+    overflow:hidden
+  }
+  .stage.is-playing {
+    height:auto;
+    aspect-ratio:1000/620;
+  }
+  canvas {
+    height:100%;
+    width:100%;
+    object-fit:contain;
+    background:#b1dce4
+  }
+  .welcome-card {
+    padding:19px 15px 17px;
+    width:88%;
+    max-width:340px;
+    border-radius:22px
+  }
+  h2 {
+    font-size:31px;
+    margin:12px 0 9px
+  }
+  .welcome-card p {
+    font-size:13px;
+    line-height:1.45;
+    margin-bottom:9px
+  }
+  .postmark {
+    font-size:8px;
+    letter-spacing:1.5px
+  }
+  .steps {
+    margin:13px 0 16px;
+    gap:6px
+  }
+  .steps div {
+    font-size:9px
+  }
+  .steps b {
+    font-size:24px
+  }
+  .big-button {
+    font-size:16px;
+    min-width:190px;
+    padding:11px 17px
+  }
+  .gentle-note {
+    font-size:9px;
+    margin-top:10px
+  }
+  .game-bottom {
+    min-height:61px;
+    padding:11px 13px;
+    justify-content:center;
+    text-align:center
+  }
+  #message {
+    font-size:12px
+  }
+  .below-game {
+    margin:17px 2px
+  }
+  .legend {
+    gap:20px;
+    font-size:10px
+  }
+  .legend b {
+    font-size:20px
+  }
+  .island-note {
+    display:none
+  }
+  .touch-controls {
+    display:block
+  }
+  footer {
+    font-size:9px;
+    gap:10px;
+    flex-wrap:wrap
+  }
+  details {
+    margin-left:auto;
+    width:100%
+  }
+  summary {
+    position:absolute;
+    right:0;
+    top:-28px
+  }
+  #workshop {
+    margin-top:0;
+    font-size:12px
+  }
+  .workshop-options {
+    gap:13px
+  }
+  .win-stars {
+    font-size:31px;
+    margin-bottom:14px
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  * {
+    scroll-behavior:auto
+  }
+}
+</style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div class="brand"><span class="eyebrow">A SMALL ADVENTURE. A BIG KIND HEART.</span><h1><span>Chopper's</span> little rescue<span class="title-star" aria-hidden="true">✦</span></h1></div>
+      <div class="utility"><button id="sound" class="soft-button" aria-pressed="false">Sound off</button><button id="pause" class="soft-button" disabled>Pause</button><button id="restart" class="soft-button">Restart</button></div>
+    </header>
+
+    <section class="game" aria-label="Animal rescue game">
+      <div class="goal-bar"><div class="goal"><span class="home-icon" aria-hidden="true">⌂</span><span>Bring everyone home</span></div><div class="counters"><span class="snack-counter"><span aria-hidden="true">★</span> <span id="snack-count">0</span> <span class="counter-label">snacks</span></span><span class="home-counter"><span id="home-count">0 / 3</span> <span class="counter-label">home</span><span id="friend-dots" aria-hidden="true">○ ○ ○</span></span></div></div>
+      <div class="stage" id="stage">
+        <canvas id="world" width="1000" height="620" tabindex="0" aria-label="Island map. Use arrow keys or W A S D to move. Collect star snacks, walk to the three friends, then return to the house."></canvas>
+        <div class="overlay" id="overlay">
+          <div class="welcome-card" id="welcome">
+            <div class="postmark">KINDNESS CREW <span aria-hidden="true">✦</span></div>
+            <h2>A little help.<br>A happy home.</h2>
+            <p>Three friends need a guide.<br>Let’s bring them home!</p>
+            <div class="steps" aria-label="How to play"><div><b aria-hidden="true">★</b><span>Find a snack</span></div><span class="step-arrow" aria-hidden="true">→</span><div><b aria-hidden="true">♡</b><span>Meet a friend</span></div><span class="step-arrow" aria-hidden="true">→</span><div><b aria-hidden="true">⌂</b><span>Go home</span></div></div>
+            <button id="start" class="big-button">Let’s help! <span aria-hidden="true">→</span></button>
+            <span class="gentle-note">No rush. Just explore.</span>
+          </div>
+          <div class="welcome-card" id="pause-card" hidden><div class="postmark">TAKE A BREATHER</div><h2>Adventure paused</h2><p>Your friends will wait right here.</p><button id="resume" class="big-button">Keep helping <span aria-hidden="true">→</span></button></div>
+          <div class="welcome-card win-card" id="win-card" hidden><div class="postmark">KINDNESS CREW <span aria-hidden="true">★</span></div><h2>Everyone is home!</h2><p><span id="win-first-line">You shared snacks.</span><br>You helped friends.<br>That’s a great adventure.</p><div class="win-stars" aria-hidden="true">✦ ★ ✦</div><button id="play-again" class="big-button">Play again <span aria-hidden="true">↻</span></button></div>
+        </div>
+      </div>
+      <div class="game-bottom"><p id="message" role="status" aria-live="polite">Find a star snack, then a friend!</p><div class="key-hint"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><span>or W A S D</span></div></div>
+    </section>
+
+    <div class="below-game"><div class="legend"><span><b class="legend-star">★</b> Snack</span><span><b>♡</b> Friend</span><span><b>⌂</b> Home</span></div><span class="island-note">Tiny island. Big friendships.</span></div>
+    <nav class="touch-controls" aria-label="Movement controls"><button data-direction="up" aria-label="Move up">↑</button><div><button data-direction="left" aria-label="Move left">←</button><button data-direction="down" aria-label="Move down">↓</button><button data-direction="right" aria-label="Move right">→</button></div></nav>
+    <footer><span>Made for curious little engineers <span aria-hidden="true">✦</span></span><details id="teacher"><summary>Grown-ups</summary><form id="workshop"><strong>Try one little change</strong><p>Vote → predict → change → play. Applying a change starts a fresh round.</p><div class="workshop-options"><label>Our helper<select id="animal"><option value="reindeer">Reindeer</option><option value="bunny">Bunny</option><option value="cat">Cat</option></select></label><label>Island obstacle<select id="obstacles"><option value="pond">Pond + trees</option><option value="logs">Two logs</option><option value="none">No obstacles</option></select></label><label class="check-label"><input id="snacks-required" type="checkbox" checked> Share a snack to make a friend</label></div><div class="workshop-actions"><button type="submit" class="soft-button">Apply + restart</button><button type="button" id="reset-defaults" class="soft-button">Reset original</button></div><p class="workshop-tip">Esc or P pauses. Shift + T opens this panel. Sound is always off until you choose it. No scores, accounts, or tracking.</p></form></details></footer>
+  </main>
+  <script>/* The rules live here. This file works in a browser and in Node's test runner. */
+(function (root, factory) {
+  const rules = factory();
+  if (typeof module === 'object' && module.exports) module.exports = rules;
+  else root.RescueRules = rules;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  // LIVE-EDIT CORNER: change one thing, predict what happens, then try it!
+  const CONFIG = Object.freeze({
+    width: 1000,
+    height: 620,
+    playerSpeed: 220,
+    playerRadius: 23,
+    playerAnimal: 'reindeer', // Try 'bunny' or 'cat'.
+    obstacleStyle: 'pond',  // Try 'logs' or 'none'.
+    snacksRequired: true,
+    friendDistance: 58,
+    home: { x: 155, y: 400, radius: 90 },
+    friends: [
+      { name: 'Bunny', animal: 'bunny', x: 275, y: 138 },
+      { name: 'Duck', animal: 'duck', x: 802, y: 160 },
+      { name: 'Fox', animal: 'fox', x: 814, y: 492 }
+    ],
+    snacks: [
+      { x: 265, y: 290 }, { x: 422, y: 102 }, { x: 667, y: 118 },
+      { x: 745, y: 426 }, { x: 500, y: 495 }
+    ]
+  });
+
+  const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  function makeObstacles(style) {
+    if (style === 'none') return [];
+    if (style === 'logs') return [
+      { kind: 'log', x: 500, y: 275, w: 185, h: 55 },
+      { kind: 'log', x: 620, y: 370, w: 160, h: 48 }
+    ];
+    return [
+      { kind: 'pond', x: 538, y: 293, radius: 98 },
+      { kind: 'tree', x: 910, y: 306, radius: 31 },
+      { kind: 'tree', x: 360, y: 465, radius: 30 }
+    ];
+  }
+
+  function createState(overrides = {}) {
+    const config = { ...CONFIG, ...overrides };
+    const player = { x: config.home.x, y: config.home.y + 35, facing: 1, moving: false };
+    return {
+      config, phase: 'ready', player,
+      friends: config.friends.map((friend, id) => ({ ...friend, id, status: 'lost' })),
+      snacks: config.snacks.map((snack, id) => ({ ...snack, id, collected: false })),
+      obstacles: makeObstacles(config.obstacleStyle),
+      pocket: 0, rescued: 0, elapsed: 0,
+      trail: [{ x: player.x, y: player.y }],
+      message: config.snacksRequired ? 'Find a star snack, then a friend!' : 'Meet a friend, then walk home!',
+      messageTime: 5,
+      events: []
+    };
+  }
+
+  function collides(point, radius, obstacle) {
+    if (obstacle.radius) return distance(point, obstacle) < radius + obstacle.radius;
+    const near = { x: clamp(point.x, obstacle.x - obstacle.w / 2, obstacle.x + obstacle.w / 2),
+      y: clamp(point.y, obstacle.y - obstacle.h / 2, obstacle.y + obstacle.h / 2) };
+    return distance(point, near) < radius;
+  }
+
+  function movePlayer(state, dx, dy) {
+    const p = state.player;
+    const c = state.config;
+    // Try each axis separately: children can slide along edges, never get stuck.
+    const nextX = { x: clamp(p.x + dx, 37, c.width - 37), y: p.y };
+    if (!state.obstacles.some(o => collides(nextX, c.playerRadius, o))) p.x = nextX.x;
+    const nextY = { x: p.x, y: clamp(p.y + dy, 48, c.height - 36) };
+    if (!state.obstacles.some(o => collides(nextY, c.playerRadius, o))) p.y = nextY.y;
+  }
+
+  function trailPoint(trail, behind) {
+    let remaining = behind;
+    for (let i = 0; i < trail.length - 1; i++) {
+      const segment = distance(trail[i], trail[i + 1]);
+      if (segment >= remaining && segment > 0) {
+        const t = remaining / segment;
+        return { x: trail[i].x + (trail[i + 1].x - trail[i].x) * t,
+          y: trail[i].y + (trail[i + 1].y - trail[i].y) * t };
+      }
+      remaining -= segment;
+    }
+    return trail[trail.length - 1];
+  }
+
+  function say(state, message, event) {
+    state.message = message;
+    state.messageTime = 4;
+    if (event) state.events.push(event);
+  }
+
+  function start(state) { state.phase = 'playing'; }
+  function togglePause(state) {
+    if (state.phase === 'playing') state.phase = 'paused';
+    else if (state.phase === 'paused') state.phase = 'playing';
+  }
+
+  function update(state, input, dt) {
+    state.events = [];
+    if (state.phase !== 'playing') return;
+    const safeDt = clamp(dt, 0, 0.05); // A slow frame cannot teleport through a pond.
+    state.elapsed += safeDt;
+    state.messageTime = Math.max(0, state.messageTime - safeDt);
+    let dx = Number(Boolean(input.right)) - Number(Boolean(input.left));
+    let dy = Number(Boolean(input.down)) - Number(Boolean(input.up));
+    const length = Math.hypot(dx, dy);
+    if (length > 0) { dx /= length; dy /= length; }
+    state.player.moving = length > 0;
+    if (dx) state.player.facing = Math.sign(dx);
+    movePlayer(state, dx * state.config.playerSpeed * safeDt, dy * state.config.playerSpeed * safeDt);
+
+    if (distance(state.player, state.trail[0]) > 5) {
+      state.trail.unshift({ x: state.player.x, y: state.player.y });
+      if (state.trail.length > 200) state.trail.pop();
+    }
+
+    for (const snack of state.snacks) {
+      if (!snack.collected && distance(state.player, snack) < 40) {
+        snack.collected = true;
+        state.pocket++;
+        say(state, state.config.snacksRequired ? 'A star snack! Find a friend to share it with.' : 'A star snack! A little bonus for exploring.', 'snack');
+      }
+    }
+
+    for (const friend of state.friends) {
+      if (friend.status !== 'lost' || distance(state.player, friend) >= 52) continue;
+      if (state.config.snacksRequired && state.pocket === 0) {
+        if (state.messageTime < 1) say(state, `${friend.name} would love a star snack!`);
+        continue;
+      }
+      if (state.config.snacksRequired) state.pocket--;
+      friend.status = 'following';
+      say(state, `${friend.name} is following! Go to the house.`, 'friend');
+    }
+
+    const followers = state.friends.filter(friend => friend.status === 'following');
+    followers.forEach((friend, index) => {
+      const target = trailPoint(state.trail, (index + 1) * state.config.friendDistance);
+      const lerp = Math.min(1, safeDt * 12);
+      friend.x += (target.x - friend.x) * lerp;
+      friend.y += (target.y - friend.y) * lerp;
+    });
+
+    if (distance(state.player, state.config.home) < state.config.home.radius - 24 && followers.length) {
+      for (const friend of followers) {
+        friend.status = 'home';
+        state.rescued++;
+        friend.x = state.config.home.x - 45 + (state.rescued - 1) * 45;
+        friend.y = state.config.home.y + 40;
+      }
+      say(state, `${state.rescued} of ${state.friends.length} friends home. You're a kind helper!`, 'home');
+      if (state.rescued === state.friends.length) {
+        state.phase = 'won';
+        say(state, 'Everyone is home!', 'win');
+      }
+    }
+  }
+
+  return { CONFIG, createState, start, togglePause, update, distance, collides, trailPoint, makeObstacles };
+});
+</script>
+  <script>/* All the art is drawn with code. No images, fonts, or network requests. */
+(function (root) {
+  'use strict';
+  const C = { ink: '#294957', sand: '#f7dfa3', grass: '#d3e5af', ocean: '#b1dce4',
+    blue: '#287d93', yellow: '#ffdc72', lilac: '#b6a0d6', cream: '#fffaf0' };
+  const reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function rounded(ctx, x, y, w, h, r, fill, stroke, line = 3) {
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = line; ctx.stroke(); }
+  }
+  function ellipse(ctx, x, y, rx, ry, fill, stroke, line = 3) {
+    ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = line; ctx.stroke(); }
+  }
+  function text(ctx, value, x, y, size = 14, color = C.ink, weight = 800) {
+    ctx.font = `${weight} ${size}px "Trebuchet MS", system-ui, sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = color; ctx.fillText(value, x, y);
+  }
+  function star(ctx, x, y, outer, inner, fill, stroke, rotation = -Math.PI / 2) {
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const a = rotation + i * Math.PI / 5, r = i % 2 ? inner : outer;
+      const px = x + Math.cos(a) * r, py = y + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2.5; ctx.stroke(); }
+  }
+  function heart(ctx, x, y, size, fill) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(size / 20, size / 20);
+    ctx.beginPath(); ctx.moveTo(0, 8); ctx.bezierCurveTo(-24, -6, -9, -19, 0, -8);
+    ctx.bezierCurveTo(9, -19, 24, -6, 0, 8); ctx.fillStyle = fill; ctx.fill(); ctx.restore();
+  }
+  function line(ctx, points, color, width) {
+    ctx.beginPath(); points.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p));
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+  }
+
+  function drawAnimal(ctx, animal, x, y, options = {}) {
+    const scale = options.scale || 1;
+    const bounce = !reducedMotion && options.moving ? Math.sin(options.time * 13) * 3 : 0;
+    ctx.save(); ctx.translate(x, y);
+    ellipse(ctx, 0, 25, 24 * scale, 7 * scale, '#35546b22');
+    ctx.scale(scale, scale); ctx.translate(0, bounce);
+    const fur = animal === 'fox' ? '#e6a76b' : animal === 'reindeer' ? '#c99d75' : animal === 'duck' ? '#ffe18b' : animal === 'cat' ? '#bcb0d7' : '#fffaf0';
+    if (options.player) { ellipse(ctx, 0, 5, 33, 35, null, '#1c637a', 3); }
+    // Little feet and body.
+    ellipse(ctx, -11, 24, 9, 5, fur, C.ink, 2);
+    ellipse(ctx, 11, 24, 9, 5, fur, C.ink, 2);
+    ellipse(ctx, 0, 10, 19, 20, fur, C.ink, 2.5);
+    if (animal === 'bunny') {
+      ellipse(ctx, -12, -26, 7, 21, fur, C.ink, 2.5);
+      ellipse(ctx, 12, -26, 7, 21, fur, C.ink, 2.5);
+      ellipse(ctx, -12, -27, 2.5, 12, '#e4b4b6');
+      ellipse(ctx, 12, -27, 2.5, 12, '#e4b4b6');
+    } else if (animal === 'fox' || animal === 'cat') {
+      for (const sign of [-1, 1]) {
+        ctx.beginPath(); ctx.moveTo(sign * 22, -9); ctx.lineTo(sign * 21, -34); ctx.lineTo(sign * 4, -22); ctx.closePath(); ctx.fillStyle = fur; ctx.fill(); ctx.strokeStyle = C.ink; ctx.lineWidth = 2.5; ctx.stroke();
+      }
+      if (animal === 'fox') {
+        ellipse(ctx, 24, 12, 10, 17, fur, C.ink, 2);
+        ellipse(ctx, 26, 1, 6, 7, C.cream);
+      }
+    } else if (animal === 'reindeer') {
+      for (const sign of [-1, 1]) {
+        line(ctx, [[sign * 14, -23], [sign * 22, -41], [sign * 29, -45]], '#765842', 5);
+        line(ctx, [[sign * 22, -40], [sign * 18, -48]], '#765842', 4);
+        ellipse(ctx, sign * 22, -11, 9, 6, fur, C.ink, 2);
+      }
+    }
+    ellipse(ctx, 0, -8, 25, 22, fur, C.ink, 2.5);
+    if (animal === 'fox') {
+      ellipse(ctx, -10, -1, 12, 9, C.cream); ellipse(ctx, 10, -1, 12, 9, C.cream);
+    }
+    ellipse(ctx, -9, -9, 3.2, 4.3, C.ink); ellipse(ctx, 9, -9, 3.2, 4.3, C.ink);
+    ellipse(ctx, -10, -10, 1, 1, C.cream); ellipse(ctx, 8, -10, 1, 1, C.cream);
+    if (animal === 'duck') {
+      ellipse(ctx, 0, 0, 11, 5, '#e8a157', C.ink, 1.8);
+      line(ctx, [[-7, 0], [7, 0]], '#926344', 1);
+    } else {
+      ellipse(ctx, 0, -1, 3.8, 2.8, animal === 'reindeer' ? '#287d93' : '#8f6864');
+      ctx.beginPath(); ctx.arc(0, 1, 6, 0.2, Math.PI - 0.2); ctx.strokeStyle = C.ink; ctx.lineWidth = 1.7; ctx.stroke();
+    }
+    ellipse(ctx, -17, 0, 4, 2.5, '#d08e854d'); ellipse(ctx, 17, 0, 4, 2.5, '#d08e854d');
+    if (options.player) {
+      // Original blue explorer hat, with a star badge.
+      rounded(ctx, -22, -32, 44, 18, 8, C.blue, C.ink, 2);
+      rounded(ctx, -29, -19, 58, 9, 4, C.blue, C.ink, 2);
+      star(ctx, 0, -24, 6, 3, C.cream);
+      rounded(ctx, -12, 9, 24, 9, 4, C.blue);
+      text(ctx, 'YOU', 0, 50, 12, '#164f63');
+    }
+    ctx.restore();
+  }
+
+  function flower(ctx, x, y, type) {
+    if (type % 3 === 0) { line(ctx, [[x, y + 4], [x - 4, y - 4], [x, y + 3], [x + 5, y - 3]], '#91ae7b', 2); return; }
+    for (let i = 0; i < 5; i++) {
+      const a = i * Math.PI * 2 / 5;
+      ellipse(ctx, x + Math.cos(a) * 4, y + Math.sin(a) * 4, 3, 3, type % 2 ? '#fff9dd' : '#a995c8');
+    }
+    ellipse(ctx, x, y, 2, 2, '#c8a060');
+  }
+
+  function drawIsland(ctx, state, time) {
+    ctx.fillStyle = C.ocean; ctx.fillRect(0, 0, 1000, 620);
+    for (let i = 0; i < 25; i++) {
+      const x = (i * 173 + 28) % 990, y = (i * 101 + 32) % 620;
+      line(ctx, [[x, y], [x + 9, y + 2], [x + 17, y], [x + 27, y + 2]], '#87bfc930', 3);
+    }
+    rounded(ctx, 22, 28, 956, 571, 105, C.sand, '#7cb1b9', 3);
+    rounded(ctx, 44, 47, 912, 532, 92, C.grass);
+    // A wide, friendly trail leads from the house into the island.
+    ctx.beginPath(); ctx.moveTo(169, 419); ctx.bezierCurveTo(270, 439, 256, 270, 337, 233);
+    ctx.bezierCurveTo(426, 204, 550, 192, 700, 227);
+    ctx.strokeStyle = '#eae6bb'; ctx.lineWidth = 47; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(698, 227); ctx.bezierCurveTo(785, 272, 740, 396, 792, 487);
+    ctx.stroke();
+    for (let i = 0; i < 47; i++) {
+      const x = 65 + ((i * 137) % 870), y = 70 + ((i * 97) % 480);
+      if (x > 80 && x < 250 && y > 250 && y < 500) continue;
+      flower(ctx, x, y, i);
+    }
+    // Two little shell details on the shore.
+    ellipse(ctx, 79, 524, 10, 6, '#fffbde', '#bfa780', 1.5);
+    line(ctx, [[76, 520], [78, 527], [81, 520], [82, 526]], '#bfa780', 1);
+    star(ctx, 908, 543, 10, 5, '#f6b791', '#c19674');
+    // Title label looks like a hand-painted island sign.
+    rounded(ctx, 454, 48, 168, 28, 14, '#f5f4cf');
+    text(ctx, 'SUNNY LITTLE ISLAND', 538, 63, 10, '#637b5d');
+  }
+
+  function drawHome(ctx, state) {
+    const { x, y } = state.config.home;
+    ellipse(ctx, x, y + 28, 89, 43, '#e9dfad');
+    // Circle and HOME sign make the goal identifiable without color.
+    ctx.save(); ctx.setLineDash([6, 8]); ellipse(ctx, x, y + 21, 77, 42, null, '#897c50', 2); ctx.restore();
+    rounded(ctx, x - 56, y - 89, 112, 76, 8, '#fff8dc', C.ink, 3);
+    ctx.beginPath(); ctx.moveTo(x - 68, y - 83); ctx.lineTo(x, y - 138); ctx.lineTo(x + 68, y - 83); ctx.closePath();
+    ctx.fillStyle = '#c493aa'; ctx.fill(); ctx.strokeStyle = C.ink; ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.stroke();
+    line(ctx, [[x - 38, y - 94], [x, y - 123], [x + 38, y - 94]], '#ead3d8', 3);
+    rounded(ctx, x - 15, y - 61, 30, 48, 14, '#597d89', C.ink, 2);
+    ellipse(ctx, x + 7, y - 34, 2, 2, C.yellow);
+    for (const dx of [-37, 37]) {
+      rounded(ctx, x + dx - 11, y - 63, 22, 24, 5, '#a7d5dd', C.ink, 2);
+      line(ctx, [[x + dx, y - 61], [x + dx, y - 41]], C.cream, 2);
+      line(ctx, [[x + dx - 9, y - 51], [x + dx + 9, y - 51]], C.cream, 2);
+    }
+    // Label above the roof, clear of the helper and returning friends.
+    line(ctx, [[x, y - 158], [x, y - 133]], '#8d7957', 5);
+    rounded(ctx, x - 43, y - 185, 86, 29, 6, C.cream, C.ink, 2);
+    text(ctx, '⌂ HOME', x, y - 170, 14);
+    heart(ctx, x, y - 104, 8, C.cream);
+  }
+
+  function drawObstacle(ctx, obstacle, time) {
+    if (obstacle.kind === 'pond') {
+      ellipse(ctx, obstacle.x, obstacle.y + 5, 107, 106, '#b3c28c');
+      ellipse(ctx, obstacle.x, obstacle.y, 98, 98, '#78bbcd', C.ink, 3);
+      ellipse(ctx, obstacle.x, obstacle.y, 85, 85, null, '#c5e5df', 2);
+      for (let i = 0; i < 4; i++) {
+        const x = obstacle.x - 53 + i * 30, y = obstacle.y - 45 + (i % 2) * 45;
+        line(ctx, [[x, y], [x + 9, y + 3], [x + 20, y]], '#c5e5df', 3);
+      }
+      ellipse(ctx, obstacle.x + 38, obstacle.y + 39, 17, 10, '#d0df9e', '#4c7c7b', 2);
+      ellipse(ctx, obstacle.x + 41, obstacle.y + 34, 5, 3, '#fff1ca');
+      text(ctx, 'WALK AROUND', obstacle.x, obstacle.y + 9, 11, '#224d60');
+      text(ctx, 'THE POND', obstacle.x, obstacle.y + 25, 11, '#224d60');
+    } else if (obstacle.kind === 'tree') {
+      const { x, y } = obstacle;
+      ellipse(ctx, x + 1, y + 18, 34, 11, '#54776225');
+      rounded(ctx, x - 8, y - 7, 16, 28, 4, '#bc9871', C.ink, 2);
+      ellipse(ctx, x - 17, y - 20, 24, 26, '#83ad8b', C.ink, 2);
+      ellipse(ctx, x + 17, y - 20, 24, 26, '#83ad8b', C.ink, 2);
+      ellipse(ctx, x, y - 36, 30, 28, '#9dc797', C.ink, 2);
+      ellipse(ctx, x - 5, y - 39, 10, 5, '#bfd6a750');
+    } else {
+      const { x, y, w, h } = obstacle;
+      rounded(ctx, x - w / 2, y - h / 2, w, h, h / 2, '#bd9572', C.ink, 3);
+      line(ctx, [[x - w / 2 + 20, y - 10], [x + w / 2 - 20, y - 10]], '#ecd5aa', 2);
+      line(ctx, [[x - w / 2 + 20, y + 8], [x + w / 2 - 20, y + 8]], '#8c725d', 2);
+      ellipse(ctx, x + w / 2 - 20, y, 15, h / 2 - 6, '#edcba0', C.ink, 2);
+      ellipse(ctx, x + w / 2 - 20, y, 7, h / 2 - 12, null, '#b18862', 2);
+    }
+  }
+
+  function draw(ctx, state, time) {
+    ctx.clearRect(0, 0, 1000, 620);
+    drawIsland(ctx, state, time);
+    drawHome(ctx, state);
+    state.obstacles.forEach(obstacle => drawObstacle(ctx, obstacle, time));
+    state.snacks.forEach(snack => {
+      if (snack.collected) return;
+      const bob = reducedMotion ? 0 : Math.sin(time * 2 + snack.id) * 3;
+      ellipse(ctx, snack.x, snack.y + 16, 16, 5, '#77674620');
+      ellipse(ctx, snack.x, snack.y + bob, 24, 24, '#fff8dc', '#b29757', 1.5);
+      star(ctx, snack.x, snack.y + bob, 17, 8, C.yellow, '#825d2e');
+    });
+    const actors = [...state.friends.map(friend => ({ ...friend, player: false })), { ...state.player, animal: state.config.playerAnimal, player: true }];
+    actors.sort((a, b) => a.y - b.y).forEach(actor => {
+      drawAnimal(ctx, actor.animal, actor.x, actor.y, { player: actor.player, moving: actor.player ? state.player.moving : actor.status === 'following' && state.player.moving, time });
+      if (!actor.player && actor.status === 'lost') {
+        const bubbleY = actor.y - (actor.animal === 'bunny' ? 66 : 52);
+        rounded(ctx, actor.x - 37, bubbleY - 15, 74, 27, 13, C.cream, C.ink, 1.5);
+        text(ctx, `${actor.name} ♡`, actor.x, bubbleY, 11);
+      }
+      if (!actor.player && actor.status === 'following') heart(ctx, actor.x, actor.y - 55, 10, '#605287');
+    });
+    if (state.phase === 'playing') {
+      // A labeled arrow reminds the player where to take their new friends.
+      if (state.friends.some(f => f.status === 'following')) {
+        const p = state.player, home = state.config.home;
+        const angle = Math.atan2(home.y - p.y, home.x - p.x);
+        ctx.save(); ctx.translate(p.x + Math.cos(angle) * 62, p.y + Math.sin(angle) * 62); ctx.rotate(angle);
+        line(ctx, [[-8, 0], [8, 0], [2, -6], [8, 0], [2, 6]], '#1d6073', 4); ctx.restore();
+      }
+    }
+    if (state.phase === 'won' && !reducedMotion) {
+      for (let i = 0; i < 26; i++) {
+        const x = (i * 149 + Math.sin(time + i) * 20) % 1000;
+        const y = (i * 43 + time * 37) % 620;
+        star(ctx, x, y, 5 + i % 3, 3, i % 2 ? '#ffdc72' : '#a48cc5', null, time + i);
+      }
+    }
+  }
+  root.RescueArt = { draw, drawAnimal };
+})(globalThis);
+</script>
+  <script>/* The small browser shell: input → update → draw. */
+(function () {
+  'use strict';
+  const Rules = window.RescueRules;
+  const canvas = document.getElementById('world');
+  const ctx = canvas.getContext('2d');
+  const $ = id => document.getElementById(id);
+  let state = Rules.createState();
+  let input = {};
+  let soundOn = false;
+  let audio = null;
+  let lastTime = 0;
+  let lastPhase = '';
+  let lastMessage = '';
+  let roundSettings = {};
+  let celebrationUntil = 0;
+  const keyDirections = { ArrowUp: 'up', w: 'up', ArrowDown: 'down', s: 'down', ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right' };
+
+  function clearInput() {
+    input = {};
+    document.querySelectorAll('[data-direction]').forEach(button => button.classList.remove('pressed'));
+    state.player.moving = false;
+  }
+  function startRound() {
+    clearInput();
+    Rules.start(state);
+    syncUI();
+    canvas.focus({ preventScroll: true });
+  }
+  function restartRound(settings = roundSettings, play = true) {
+    clearInput();
+    roundSettings = { ...settings };
+    state = Rules.createState(roundSettings);
+    celebrationUntil = 0;
+    if (play) startRound(); else syncUI();
+  }
+  function pauseRound() {
+    clearInput();
+    Rules.togglePause(state);
+    syncUI();
+    if (state.phase === 'paused') $('resume').focus({ preventScroll: true });
+    else if (state.phase === 'playing') canvas.focus({ preventScroll: true });
+  }
+
+  function playTone(event) {
+    if (!soundOn || !audio) return;
+    const melodies = { snack: [660, 880], friend: [523, 659, 784], home: [659, 784, 1047], win: [523, 659, 784, 1047] };
+    const melody = melodies[event] || [];
+    melody.forEach((frequency, index) => {
+      const oscillator = audio.createOscillator(), gain = audio.createGain();
+      const begin = audio.currentTime + index * 0.10;
+      oscillator.type = 'sine'; oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0, begin); gain.gain.linearRampToValueAtTime(0.045, begin + 0.01); gain.gain.exponentialRampToValueAtTime(0.001, begin + 0.18);
+      oscillator.connect(gain); gain.connect(audio.destination); oscillator.start(begin); oscillator.stop(begin + 0.2);
+    });
+  }
+
+  function syncUI() {
+    canvas.setAttribute('aria-label', state.config.snacksRequired
+      ? 'Island map. Use arrow keys or W A S D to move. Collect star snacks, walk to the three friends, then return to the house.'
+      : 'Island map. Use arrow keys or W A S D to move. Walk to the three friends, then return to the house. Star snacks are optional.');
+    $('win-first-line').textContent = state.config.snacksRequired ? 'You shared snacks.' : 'You explored the island.';
+    $('snack-count').textContent = state.pocket;
+    $('home-count').textContent = `${state.rescued} / ${state.friends.length}`;
+    $('friend-dots').textContent = state.friends.map(f => f.status === 'home' ? '●' : '○').join(' ');
+    if (state.message !== lastMessage) {
+      $('message').textContent = state.message;
+      lastMessage = state.message;
+    }
+    if (state.phase === lastPhase) return;
+    const phase = state.phase;
+    $('stage').classList.toggle('is-playing', phase === 'playing');
+    $('overlay').hidden = phase === 'playing';
+    $('welcome').hidden = phase !== 'ready';
+    $('pause-card').hidden = phase !== 'paused';
+    $('win-card').hidden = phase !== 'won';
+    $('pause').disabled = phase === 'ready' || phase === 'won';
+    $('pause').textContent = phase === 'paused' ? 'Resume' : 'Pause';
+    if (phase === 'won') { celebrationUntil = performance.now() / 1000 + 4; clearInput(); $('play-again').focus({ preventScroll: true }); }
+    lastPhase = phase;
+  }
+
+  function fitCanvas() {
+    // Logical coordinates stay constant as the page resizes; backing pixels stay crisp.
+    const rect = canvas.getBoundingClientRect();
+    const scale = Math.min(2, window.devicePixelRatio || 1);
+    // CSS may letterbox the mobile canvas, so use its logical aspect ratio.
+    const backingWidth = Math.max(1, Math.round(rect.width * scale));
+    canvas.width = backingWidth;
+    canvas.height = Math.round(backingWidth * Rules.CONFIG.height / Rules.CONFIG.width);
+    ctx.setTransform(canvas.width / 1000, 0, 0, canvas.height / 620, 0, 0);
+  }
+
+  function frame(now) {
+    const seconds = now / 1000;
+    const dt = lastTime ? seconds - lastTime : 0;
+    lastTime = seconds;
+    Rules.update(state, input, dt);
+    state.events.forEach(playTone);
+    syncUI();
+    // Stop the confetti after a short celebration.
+    const artState = state.phase === 'won' && seconds > celebrationUntil ? { ...state, phase: 'celebrated' } : state;
+    window.RescueArt.draw(ctx, artState, seconds);
+    requestAnimationFrame(frame);
+  }
+
+  function isEditing(event) { return /INPUT|SELECT|TEXTAREA/.test(event.target.tagName); }
+  function takeTapStep(direction) {
+    // A quick little tap still moves, even if it lands between animation frames.
+    Rules.update(state, { [direction]: true }, 1 / 60);
+    state.events.forEach(playTone);
+    syncUI();
+  }
+  document.addEventListener('keydown', event => {
+    if (isEditing(event)) return;
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    if (event.shiftKey && key === 't') { $('teacher').open = !$('teacher').open; clearInput(); return; }
+    if (key === 'Escape' || key === 'p') {
+      if (state.phase === 'playing' || state.phase === 'paused') { event.preventDefault(); if (!event.repeat) pauseRound(); }
+      return;
+    }
+    const direction = keyDirections[key];
+    if (direction && state.phase === 'playing') {
+      event.preventDefault();
+      input[direction] = true;
+      if (!event.repeat) takeTapStep(direction);
+    }
+  });
+  document.addEventListener('keyup', event => {
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    if (keyDirections[key]) input[keyDirections[key]] = false;
+  });
+  window.addEventListener('blur', () => { clearInput(); if (state.phase === 'playing') pauseRound(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { clearInput(); if (state.phase === 'playing') pauseRound(); } });
+  window.addEventListener('resize', fitCanvas);
+
+  // Pointer events work for touch, pen, and mouse. Capture ensures release isn't lost.
+  document.querySelectorAll('[data-direction]').forEach(button => {
+    const stop = () => { input[button.dataset.direction] = false; button.classList.remove('pressed'); };
+    button.addEventListener('pointerdown', event => {
+      event.preventDefault();
+      if (state.phase !== 'playing') return;
+      button.setPointerCapture(event.pointerId);
+      input[button.dataset.direction] = true;
+      button.classList.add('pressed');
+      takeTapStep(button.dataset.direction);
+    });
+    button.addEventListener('pointerup', stop);
+    button.addEventListener('pointercancel', stop);
+    button.addEventListener('lostpointercapture', stop);
+  });
+
+  $('start').addEventListener('click', startRound);
+  $('restart').addEventListener('click', () => restartRound());
+  $('pause').addEventListener('click', pauseRound);
+  $('resume').addEventListener('click', pauseRound);
+  $('play-again').addEventListener('click', () => restartRound());
+  $('sound').addEventListener('click', async () => {
+    if (!audio) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) { $('sound').textContent = 'Sound unavailable'; $('sound').disabled = true; return; }
+      audio = new AudioContext();
+    }
+    soundOn = !soundOn;
+    $('sound').textContent = soundOn ? 'Sound on' : 'Sound off';
+    $('sound').setAttribute('aria-pressed', String(soundOn));
+    if (soundOn) { await audio.resume(); playTone('snack'); } else await audio.suspend();
+  });
+  $('workshop').addEventListener('submit', event => {
+    event.preventDefault();
+    restartRound({ playerAnimal: $('animal').value, obstacleStyle: $('obstacles').value, snacksRequired: $('snacks-required').checked });
+    $('teacher').open = false;
+  });
+  $('reset-defaults').addEventListener('click', () => {
+    $('animal').value = Rules.CONFIG.playerAnimal;
+    $('obstacles').value = Rules.CONFIG.obstacleStyle;
+    $('snacks-required').checked = Rules.CONFIG.snacksRequired;
+    restartRound({});
+    $('teacher').open = false;
+  });
+  $('teacher').addEventListener('toggle', () => {
+    clearInput();
+    if ($('teacher').open && state.phase === 'playing') pauseRound();
+  });
+
+  // Read-only inspection hook for classroom debugging and automated checks.
+  window.RescueGame = Object.freeze({
+    snapshot: () => JSON.parse(JSON.stringify(state)),
+    inputSnapshot: () => ({ ...input }),
+    soundEnabled: () => soundOn
+  });
+  fitCanvas();
+  syncUI();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

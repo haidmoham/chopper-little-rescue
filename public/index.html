@@ -12,7 +12,7 @@
 <body>
   <main class="shell">
     <header class="masthead">
-      <div class="brand"><span class="eyebrow">A SMALL ADVENTURE. A BIG KIND HEART.</span><h1><span>Chopper's</span> little rescue<span class="title-star" aria-hidden="true">✦</span></h1></div>
+      <div class="brand"><span class="eyebrow">A LITTLE ISLAND. AN EXTRAORDINARY ADVENTURE.</span><h1><span>Chopper's</span> little rescue<span class="title-star" aria-hidden="true">✦</span></h1></div>
       <div class="utility"><button id="sound" class="soft-button" aria-pressed="false">Sound off</button><button id="pause" class="soft-button" disabled>Pause</button><button id="restart" class="soft-button">Restart</button></div>
     </header>
 
@@ -22,15 +22,15 @@
         <canvas id="world" width="1000" height="620" tabindex="0" aria-label="Island map. Use arrow keys or W A S D to move. Collect star snacks, walk to the three friends, then return to the house."></canvas>
         <div class="overlay" id="overlay">
           <div class="welcome-card" id="welcome">
-            <div class="postmark">KINDNESS CREW <span aria-hidden="true">✦</span></div>
-            <h2>A little help.<br>A happy home.</h2>
-            <p>Three friends need a guide.<br>Let’s bring them home!</p>
+            <div class="postmark">WELCOME TO YOUR LITTLE WORLD <span aria-hidden="true">✦</span></div>
+            <h2>Small paws.<br>Big adventure.</h2>
+            <p>Find a snack. Make a friend.<br>Bring the whole crew home.</p>
             <div class="steps" aria-label="How to play"><div><b aria-hidden="true">★</b><span>Find a snack</span></div><span class="step-arrow" aria-hidden="true">→</span><div><b aria-hidden="true">♡</b><span>Meet a friend</span></div><span class="step-arrow" aria-hidden="true">→</span><div><b aria-hidden="true">⌂</b><span>Go home</span></div></div>
-            <button id="start" class="big-button">Let’s help! <span aria-hidden="true">→</span></button>
+            <button id="start" class="big-button">Let’s explore! <span aria-hidden="true">→</span></button>
             <span class="gentle-note">No rush. Just explore.</span>
           </div>
           <div class="welcome-card" id="pause-card" hidden><div class="postmark">TAKE A BREATHER</div><h2>Adventure paused</h2><p>Your friends will wait right here.</p><button id="resume" class="big-button">Keep helping <span aria-hidden="true">→</span></button></div>
-          <div class="welcome-card win-card" id="win-card" hidden><div class="postmark">KINDNESS CREW <span aria-hidden="true">★</span></div><h2>Everyone is home!</h2><p><span id="win-first-line">You shared snacks.</span><br>You helped friends.<br>That’s a great adventure.</p><div class="win-stars" aria-hidden="true">✦ ★ ✦</div><button id="play-again" class="big-button">Play again <span aria-hidden="true">↻</span></button></div>
+          <div class="welcome-card win-card" id="win-card" hidden><div class="postmark">THE WHOLE CREW IS TOGETHER <span aria-hidden="true">★</span></div><h2>Everyone is home!</h2><p><span id="win-first-line">You shared snacks.</span> You made a little world happier.</p><button id="play-again" class="big-button">One more adventure <span aria-hidden="true">↻</span></button></div>
         </div>
       </div>
       <div class="game-bottom"><p id="message" role="status" aria-live="polite">Find a star snack, then a friend!</p><div class="key-hint"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><span>or W A S D</span></div></div>
@@ -38,10 +38,11 @@
 
     <div class="below-game"><div class="legend"><span><b class="legend-star">★</b> Snack</span><span><b>♡</b> Friend</span><span><b>⌂</b> Home</span></div><span class="island-note">Tiny island. Big friendships.</span></div>
     <nav class="touch-controls" aria-label="Movement controls"><button data-direction="up" aria-label="Move up">↑</button><div><button data-direction="left" aria-label="Move left">←</button><button data-direction="down" aria-label="Move down">↓</button><button data-direction="right" aria-label="Move right">→</button></div></nav>
-    <footer><span>Made for curious little engineers <span aria-hidden="true">✦</span></span><details id="teacher"><summary>Grown-ups</summary><form id="workshop"><strong>Try one little change</strong><p>Vote → predict → change → play. Applying a change starts a fresh round.</p><div class="workshop-options"><label>Our helper<select id="animal"><option value="reindeer">Reindeer</option><option value="bunny">Bunny</option><option value="cat">Cat</option></select></label><label>Island obstacle<select id="obstacles"><option value="pond">Pond + trees</option><option value="logs">Two logs</option><option value="none">No obstacles</option></select></label><label class="check-label"><input id="snacks-required" type="checkbox" checked> Share a snack to make a friend</label></div><div class="workshop-actions"><button type="submit" class="soft-button">Apply + restart</button><button type="button" id="reset-defaults" class="soft-button">Reset original</button></div><p class="workshop-tip">Esc or P pauses. Shift + T opens this panel. Sound is always off until you choose it. No scores, accounts, or tracking.</p></form></details></footer>
+    <footer><span>Made for curious little engineers <span aria-hidden="true">✦</span></span><details id="teacher"><summary>Grown-ups</summary><form id="workshop"><strong>What if our world could…?</strong><p>Vote → predict → transform → play. Each change starts a fresh adventure.</p><div class="workshop-options"><label>Time of day<select id="world-mood"><option value="sunny">Sunshine</option><option value="moonlight">Moonlight + glowing stars</option></select></label><label>Animal size<select id="animal-scale"><option value="1">Little explorers</option><option value="1.6">Gentle giants</option></select></label><label class="check-label"><input id="flying" type="checkbox"> Give everyone wings</label><label>Our helper<select id="animal"><option value="reindeer">Reindeer</option><option value="bunny">Bunny</option><option value="cat">Cat</option></select></label><label>Island obstacle<select id="obstacles"><option value="pond">Pond + trees</option><option value="logs">Two logs</option><option value="none">No obstacles</option></select></label><label class="check-label"><input id="snacks-required" type="checkbox" checked> Share a snack to make a friend</label><label class="check-label"><input id="calm-motion" type="checkbox"> Calm motion</label><label class="check-label"><input id="low-power" type="checkbox"> Low power (30 fps)</label></div><div class="workshop-actions"><button type="submit" class="soft-button">Transform + restart</button><button type="button" id="reset-defaults" class="soft-button">Reset original</button></div><p class="workshop-tip">Esc or P pauses. Shift + T opens this panel. Wings let you fly over obstacles. Size and moonlight keep the rescue rules. Sound starts off.</p><output id="performance" class="workshop-tip">Preparing the little world…</output></form></details></footer>
   </main>
   <script src="logic.js"></script>
   <script src="draw.js"></script>
+  <script src="scene.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

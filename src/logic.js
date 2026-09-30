@@ -13,6 +13,11 @@
     playerSpeed: 220,
     playerRadius: 23,
     playerAnimal: 'reindeer', // Try 'bunny' or 'cat'.
+    worldMood: 'sunny',     // Try 'moonlight'. The whole world changes!
+    flying: false,         // Give everyone wings; they can fly over the pond.
+    animalScale: 1,        // Try 1.6 for a land of gentle giants.
+    reducedMotion: false,
+    lowPower: false,
     obstacleStyle: 'pond',  // Try 'logs' or 'none'.
     snacksRequired: true,
     friendDistance: 58,
@@ -56,7 +61,7 @@
       trail: [{ x: player.x, y: player.y }],
       message: config.snacksRequired ? 'Find a star snack, then a friend!' : 'Meet a friend, then walk home!',
       messageTime: 5,
-      events: []
+      events: [], effects: [], celebrationTime: 0, discoveries: []
     };
   }
 
@@ -72,9 +77,9 @@
     const c = state.config;
     // Try each axis separately: children can slide along edges, never get stuck.
     const nextX = { x: clamp(p.x + dx, 37, c.width - 37), y: p.y };
-    if (!state.obstacles.some(o => collides(nextX, c.playerRadius, o))) p.x = nextX.x;
+    if (c.flying || !state.obstacles.some(o => collides(nextX, c.playerRadius, o))) p.x = nextX.x;
     const nextY = { x: p.x, y: clamp(p.y + dy, 48, c.height - 36) };
-    if (!state.obstacles.some(o => collides(nextY, c.playerRadius, o))) p.y = nextY.y;
+    if (c.flying || !state.obstacles.some(o => collides(nextY, c.playerRadius, o))) p.y = nextY.y;
   }
 
   function trailPoint(trail, behind) {
@@ -97,6 +102,11 @@
     if (event) state.events.push(event);
   }
 
+  function burst(state, kind, x, y, life = 1.2) {
+    state.effects.push({ kind, x, y, age: 0, life, seed: state.elapsed });
+    if (state.effects.length > 14) state.effects.shift();
+  }
+
   function start(state) { state.phase = 'playing'; }
   function togglePause(state) {
     if (state.phase === 'playing') state.phase = 'paused';
@@ -105,8 +115,13 @@
 
   function update(state, input, dt) {
     state.events = [];
-    if (state.phase !== 'playing') return;
     const safeDt = clamp(dt, 0, 0.05); // A slow frame cannot teleport through a pond.
+    if (state.phase === 'playing' || state.phase === 'won') {
+      state.effects.forEach(effect => { effect.age += safeDt; });
+      state.effects = state.effects.filter(effect => effect.age < effect.life);
+    }
+    if (state.phase === 'won') { state.celebrationTime += safeDt; return; }
+    if (state.phase !== 'playing') return;
     state.elapsed += safeDt;
     state.messageTime = Math.max(0, state.messageTime - safeDt);
     let dx = Number(Boolean(input.right)) - Number(Boolean(input.left));
@@ -126,6 +141,7 @@
       if (!snack.collected && distance(state.player, snack) < 40) {
         snack.collected = true;
         state.pocket++;
+        burst(state, 'star', snack.x, snack.y);
         say(state, state.config.snacksRequired ? 'A star snack! Find a friend to share it with.' : 'A star snack! A little bonus for exploring.', 'snack');
       }
     }
@@ -138,6 +154,8 @@
       }
       if (state.config.snacksRequired) state.pocket--;
       friend.status = 'following';
+      friend.happyUntil = state.elapsed + 2;
+      burst(state, 'hearts', friend.x, friend.y, 1.8);
       say(state, `${friend.name} is following! Go to the house.`, 'friend');
     }
 
@@ -149,6 +167,14 @@
       friend.y += (target.y - friend.y) * lerp;
     });
 
+    // Optional tiny discoveries. They never gate the rescue or add a task.
+    for (const surprise of [{ name: 'butterfly', x: 83, y: 128 }, { name: 'shell', x: 920, y: 535 }]) {
+      if (!state.discoveries.includes(surprise.name) && distance(state.player, surprise) < 58) {
+        state.discoveries.push(surprise.name);
+        burst(state, 'wonder', surprise.x, surprise.y, 3);
+      }
+    }
+
     if (distance(state.player, state.config.home) < state.config.home.radius - 24 && followers.length) {
       for (const friend of followers) {
         friend.status = 'home';
@@ -157,12 +183,14 @@
         friend.y = state.config.home.y + 40;
       }
       say(state, `${state.rescued} of ${state.friends.length} friends home. You're a kind helper!`, 'home');
+      burst(state, 'home', state.config.home.x, state.config.home.y, 2.2);
       if (state.rescued === state.friends.length) {
         state.phase = 'won';
+        state.celebrationTime = 0;
         say(state, 'Everyone is home!', 'win');
       }
     }
   }
 
-  return { CONFIG, createState, start, togglePause, update, distance, collides, trailPoint, makeObstacles };
+  return { CONFIG, createState, start, togglePause, update, distance, collides, trailPoint, makeObstacles, burst };
 });
