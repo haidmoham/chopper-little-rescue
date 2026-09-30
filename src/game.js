@@ -100,6 +100,12 @@
   }
 
   function isEditing(event) { return /INPUT|SELECT|TEXTAREA/.test(event.target.tagName); }
+  function takeTapStep(direction) {
+    // A quick little tap still moves, even if it lands between animation frames.
+    Rules.update(state, { [direction]: true }, 1 / 60);
+    state.events.forEach(playTone);
+    syncUI();
+  }
   document.addEventListener('keydown', event => {
     if (isEditing(event)) return;
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
@@ -109,7 +115,11 @@
       return;
     }
     const direction = keyDirections[key];
-    if (direction && state.phase === 'playing') { event.preventDefault(); input[direction] = true; }
+    if (direction && state.phase === 'playing') {
+      event.preventDefault();
+      input[direction] = true;
+      if (!event.repeat) takeTapStep(direction);
+    }
   });
   document.addEventListener('keyup', event => {
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
@@ -128,6 +138,7 @@
       button.setPointerCapture(event.pointerId);
       input[button.dataset.direction] = true;
       button.classList.add('pressed');
+      takeTapStep(button.dataset.direction);
     });
     button.addEventListener('pointerup', stop);
     button.addEventListener('pointercancel', stop);

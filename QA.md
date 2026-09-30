@@ -2,7 +2,7 @@
 
 ## Deterministic rules
 
-`npm test`: **10/10 passed**, 2026-09-30.
+`npm test`: **16/16 passed**, 2026-09-30.
 
 - Ready/paused states stop movement; resume moves
 - WASD/arrow input is represented as independent directions; diagonal speed is normalized
@@ -13,6 +13,9 @@
 - Home deposits followers once; three friends produce a win
 - Workshop overrides and snack-free rules preserve original defaults
 - Trail points interpolate around bends
+- A complete movement-only route rescues all three friends without teleporting
+- DOM-stub checks cover input wiring, quick taps, pause/restart, blur clearing, resize, pointer cancellation, and workshop reset
+- Offline build has three inline scripts and no runtime asset references
 
 `npm run build`: passed. Produces static web files and one self-contained offline HTML.
 

@@ -64,10 +64,36 @@ test('home deposits followers once, and all three friends trigger a win', () => 
 test('workshop overrides preserve the original and can remove snack rule', () => {
   const s = play({ playerAnimal: 'cat', obstacleStyle: 'none', snacksRequired: false });
   assert.equal(s.obstacles.length, 0); assert.equal(s.config.playerAnimal, 'cat');
+  assert.equal(s.message, 'Meet a friend, then walk home!');
   Object.assign(s.player, s.friends[0]); tick(s); assert.equal(s.friends[0].status, 'following'); assert.equal(s.pocket, 0);
   assert.equal(R.CONFIG.snacksRequired, true); assert.equal(R.CONFIG.playerAnimal, 'reindeer');
 });
 test('trail interpolates around bends, including a short trail', () => {
   assert.deepEqual(R.trailPoint([{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }], 150), { x: 100, y: 50 });
   assert.deepEqual(R.trailPoint([{ x: 7, y: 8 }], 150), { x: 7, y: 8 });
+});
+
+test('a complete three-friend route is reachable by movement, with no teleporting', () => {
+  const s = play();
+  function walkTo(x, y) {
+    let frames = 0;
+    while (R.distance(s.player, { x, y }) > 5 && s.phase === 'playing' && frames++ < 600) {
+      const dx = x - s.player.x, dy = y - s.player.y;
+      tick(s, { right: dx > 3, left: dx < -3, down: dy > 3, up: dy < -3 });
+    }
+    assert.ok(frames < 600, `clear route to ${x},${y}`);
+  }
+  // Bunny: the nearby snack, then home.
+  walkTo(265, 435); walkTo(265, 290); walkTo(275, 138);
+  assert.equal(s.friends[0].status, 'following');
+  walkTo(155, 138); walkTo(155, 435); assert.equal(s.rescued, 1);
+  // Duck: take the north side of the pond.
+  walkTo(155, 102); walkTo(422, 102); walkTo(667, 118); walkTo(802, 160);
+  assert.equal(s.friends[1].status, 'following');
+  walkTo(667, 118); walkTo(155, 102); walkTo(155, 435); assert.equal(s.rescued, 2);
+  // Fox: go around the tree on the south side.
+  walkTo(155, 550); walkTo(500, 550); walkTo(500, 495); walkTo(814, 492);
+  assert.equal(s.friends[2].status, 'following');
+  walkTo(814, 550); walkTo(155, 550); walkTo(155, 435);
+  assert.equal(s.rescued, 3); assert.equal(s.phase, 'won');
 });

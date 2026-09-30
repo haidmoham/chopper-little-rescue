@@ -54,7 +54,7 @@
       obstacles: makeObstacles(config.obstacleStyle),
       pocket: 0, rescued: 0, elapsed: 0,
       trail: [{ x: player.x, y: player.y }],
-      message: 'Find a star snack, then a friend!',
+      message: config.snacksRequired ? 'Find a star snack, then a friend!' : 'Meet a friend, then walk home!',
       messageTime: 5,
       events: []
     };
@@ -126,7 +126,7 @@
       if (!snack.collected && distance(state.player, snack) < 40) {
         snack.collected = true;
         state.pocket++;
-        say(state, 'A star snack! Find a friend to share it with.', 'snack');
+        say(state, state.config.snacksRequired ? 'A star snack! Find a friend to share it with.' : 'A star snack! A little bonus for exploring.', 'snack');
       }
     }
 
