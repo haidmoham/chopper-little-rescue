@@ -619,8 +619,13 @@ details[open] summary:after {
     border-radius:18px
   }
   .stage {
-    aspect-ratio:1.2;
+    height:360px;
+    aspect-ratio:auto;
     overflow:hidden
+  }
+  .stage.is-playing {
+    height:auto;
+    aspect-ratio:1000/620;
   }
   canvas {
     height:100%;
@@ -1226,6 +1231,7 @@ details[open] summary:after {
     }
     if (state.phase === lastPhase) return;
     const phase = state.phase;
+    $('stage').classList.toggle('is-playing', phase === 'playing');
     $('overlay').hidden = phase === 'playing';
     $('welcome').hidden = phase !== 'ready';
     $('pause-card').hidden = phase !== 'paused';

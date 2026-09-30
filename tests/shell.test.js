@@ -9,11 +9,11 @@ const R = require('../src/logic.js');
 function boot() {
   const make = (id, tagName = 'BUTTON') => ({
     id, tagName, hidden: false, disabled: false, textContent: '', dataset: {}, listeners: {},
-    classList: { add() {}, remove() {} }, setAttribute() {}, setPointerCapture() {},
+    classList: { add() {}, remove() {}, toggle() {} }, setAttribute() {}, setPointerCapture() {},
     focus() {}, addEventListener(type, listener) { this.listeners[type] = listener; },
     fire(type, fields = {}) { this.listeners[type]?.({ target: this, preventDefault() {}, ...fields }); }
   });
-  const ids = ['world', 'snack-count', 'home-count', 'friend-dots', 'message', 'overlay', 'welcome', 'pause-card', 'win-card', 'win-first-line', 'pause', 'resume', 'play-again', 'teacher', 'start', 'restart', 'sound', 'workshop', 'animal', 'obstacles', 'snacks-required', 'reset-defaults'];
+  const ids = ['world', 'stage', 'snack-count', 'home-count', 'friend-dots', 'message', 'overlay', 'welcome', 'pause-card', 'win-card', 'win-first-line', 'pause', 'resume', 'play-again', 'teacher', 'start', 'restart', 'sound', 'workshop', 'animal', 'obstacles', 'snacks-required', 'reset-defaults'];
   const elements = Object.fromEntries(ids.map(id => [id, make(id)]));
   let width = 1000;
   elements.world.getBoundingClientRect = () => ({ width });

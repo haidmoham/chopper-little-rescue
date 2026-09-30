@@ -69,6 +69,7 @@
     }
     if (state.phase === lastPhase) return;
     const phase = state.phase;
+    $('stage').classList.toggle('is-playing', phase === 'playing');
     $('overlay').hidden = phase === 'playing';
     $('welcome').hidden = phase !== 'ready';
     $('pause-card').hidden = phase !== 'paused';

@@ -610,8 +610,13 @@ details[open] summary:after {
     border-radius:18px
   }
   .stage {
-    aspect-ratio:1.2;
+    height:360px;
+    aspect-ratio:auto;
     overflow:hidden
+  }
+  .stage.is-playing {
+    height:auto;
+    aspect-ratio:1000/620;
   }
   canvas {
     height:100%;
