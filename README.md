@@ -29,6 +29,8 @@ npm run dev
 
 Open http://localhost:4173. No `npm install` is needed.
 
+The local preview uses only Node's built-in HTTP server. For a desktop inspection of the phone layout, open `/mobile-preview.html`; it displays the standalone HTML in a real 390-pixel iframe with the arrow pad.
+
 | File | What to change |
 |---|---|
 | `src/logic.js` | Named `CONFIG`, state, rules, movement, collisions, rescue goal |
