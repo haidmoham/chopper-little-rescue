@@ -18,3 +18,7 @@ const offline = source('index.html')
 fs.writeFileSync(path.join(output, 'chopper-little-rescue-offline.html'), offline);
 fs.copyFileSync(path.join(root, 'src/classroom-backup.html'), path.join(output, 'classroom-backup.html'));
 console.log('Built public/ and self-contained chopper-little-rescue-offline.html');
+// Live classroom battle edition. Keep the original rescue source and backup intact.
+require('esbuild').buildSync({ entryPoints: [path.join(root, 'src/battle.js')], bundle: true, minify: true, format: 'iife', target: 'es2020', outfile: path.join(output, 'battle.js'), legalComments: 'inline' });
+fs.writeFileSync(path.join(output, 'index.html'), source('battle.html'));
+fs.writeFileSync(path.join(output, 'mega-brick-battle-offline.html'), source('battle.html').replace('<script src="battle.js"></script>', () => `<script>${fs.readFileSync(path.join(output, 'battle.js'), 'utf8')}</script>`));
